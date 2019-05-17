@@ -29,8 +29,44 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 #
 # Your goal is to write the score method.
 
+def countPoint(value_set)
+  point = 0
+  if value_set.count >= 3
+    case value_set[0]
+    when 1
+      point = 1000 + (value_set.count - 3) * 100
+    when 5
+      point = value_set[0] * 100 + (value_set.count - 3) * 50
+    else
+      point = value_set[0] * 100
+    end
+  else
+    case value_set[0]
+    when 1
+      point = value_set.count * 100;
+    when 5
+      point = value_set.count * 50;
+    end
+  end
+  return point
+end
+
 def score(dice)
   # You need to write this method
+  dice.sort!
+  point = 0
+  value_set = []
+  dice.each do |item|
+    if (value_set.count == 0) || (value_set[0] == item)
+      value_set << item
+    else
+      point += countPoint(value_set)
+      value_set = []
+      value_set << item
+    end
+  end
+  return point + countPoint(value_set)
+
 end
 
 class AboutScoringProject < Neo::Koan
